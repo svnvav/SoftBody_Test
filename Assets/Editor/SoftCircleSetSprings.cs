@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Svnvav.SoftBody.Editor
 {
-    public class SoftCircleBonesProcessor : EditorWindow
+    public class SoftCircleSetSprings : EditorWindow
     {
         private Transform _softBody;
         [SerializeField] private float _colliderRadius = 0.3f;
@@ -14,10 +14,10 @@ namespace Svnvav.SoftBody.Editor
         [SerializeField] private float _springFrequency = 5f;
         
 
-        [MenuItem("Tools/SoftCircleBonesProcessor")]
+        [MenuItem("Tools/SoftCircleSetSprings")]
         private static void OnMenuClick()
         {
-            GetWindow<SoftCircleBonesProcessor>();
+            GetWindow<SoftCircleSetSprings>();
         }
 
         private void OnGUI()
@@ -47,8 +47,10 @@ namespace Svnvav.SoftBody.Editor
                 {
                     collider = part.AddComponent<CircleCollider2D>();
                 }
-                collider.radius = _colliderRadius;
-                collider.offset = Vector2.right * (_colliderRadius - _colliderRadiusGap);
+
+                part.transform.localScale = Vector3.one * _colliderRadius;
+                collider.radius = 0.5f;//_colliderRadius;
+                collider.offset = Vector2.zero;//Vector2.right * (_colliderRadius - _colliderRadiusGap);
                 
                 var rb2d = part.GetComponent<Rigidbody2D>();
                 if (rb2d == null)
@@ -78,8 +80,9 @@ namespace Svnvav.SoftBody.Editor
                     springJoint.connectedBody = connectedBody;
                     springJoint.dampingRatio = _springDampingRatio;
                     springJoint.frequency = _springFrequency;
-                    springJoint.anchor = Vector2.right * (_colliderRadius - _colliderRadiusGap);
-                    springJoint.connectedAnchor = Vector2.right * (_colliderRadius - _colliderRadiusGap);
+                    springJoint.autoConfigureConnectedAnchor = true;
+                    springJoint.anchor = Vector2.zero;//Vector2.right * (_colliderRadius - _colliderRadiusGap);
+                    //springJoint.connectedAnchor = Vector2.zero;//Vector2.right * (_colliderRadius - _colliderRadiusGap);
                 }
             }
         }
